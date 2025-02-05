@@ -1,5 +1,6 @@
 import {ITask} from "../../types/types.ts";
 import style from "./TaskItem.module.scss";
+import axios from 'axios';
 
 interface IProps {
     task: ITask;
@@ -24,16 +25,31 @@ const TaskItem = ({ task, tasks, setTasks }: IProps) => {
       }
     }
 
-    const toggleCompletion = () => {
+    const toggleCompletion = async () => {
+      try {
+        const updatedTask = { ...task, completed: !task.completed };
+        const response = await axios.put(`https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks/:${task.id}`,
+          updatedTask);
+        console.log('задача обновлена', response.data);
+ 
         setTasks(
-            tasks.map((t) =>
-                t.id === task.id ? { ...t, completed: !t.completed } : t
-            )
+          tasks.map((t) => t.id === task.id ? { ...t, completed: !t.completed } : t
+          )
         );
+      } catch (error) {
+        console.log('возникла ошибка:', error);
+      }
     };
 
-    const deleteTask = () => {
+    const deleteTask = async () => {
+      try {
+        await axios.delete(`https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks/:${task.id}`);
+        console.log('Задача удалена');
+
         setTasks(tasks.filter((t) => t.id !== task.id));
+      } catch (error) {
+        console.log('возникла ошибка:', error);
+      }
     };
 
 

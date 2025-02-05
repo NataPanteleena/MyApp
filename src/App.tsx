@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useEffect } from 'react'
 import { ITask } from './types/types.ts';
 import './App.scss'
 import Header from './components/Header/Header.tsx';
@@ -7,11 +8,17 @@ import Filters from './components/Filters/Filters.tsx';
 import Categories from './components/Categories/Categories.tsx';
 import TaskList from './components/TaskList/TaskList.tsx';
 
-
 const App = () => {
   const [tasks, setTasks] = useState<ITask[] | []>([]);
   const [filter, setFilter] = useState<string>('all');
   const [categoty, setCategoty] = useState<string>('Все');
+
+
+  useEffect(() => {
+    fetch('https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks/')
+      .then(res => res.json())
+      .then(task => setTasks(task));
+  }, []);
 
 
   return (

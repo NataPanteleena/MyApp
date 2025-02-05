@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {ITask} from "../../types/types.ts";
 import style from "./TaskInput.module.scss";
+import axios from 'axios';
 
 interface IProps {
     tasks: ITask[] | [];
@@ -24,19 +25,26 @@ const TaskInput = ({ tasks, setTasks }: IProps): JSX.Element => {
       setChecked(event.target.checked);
     };
 
-  const addTask = () => {
+  const addTask = async () => {
         if (inputValue.trim()) {
-            setTasks([...tasks,
-              { id: Date.now(),
+          const newTask = {
+                id: Date.now(),
                 text: inputValue,
                 category:selectedOption,
                 priority:checked,
                 completed: false,
-              }
-            ]);
+              };
+
+          try {
+            const response = await axios.post('https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks', newTask);
+            console.log('Задача успешно сохранена на сервере:', response.data);
+
+            setTasks([...tasks, newTask]);
             setInputValue('');
             setSelectedOption('Без категории');
             setChecked(false);
+          } catch (error) {
+          console.error('Ошибка при сохранении задачи:', error)}
         }
     };
 
