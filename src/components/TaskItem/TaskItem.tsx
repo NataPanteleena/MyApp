@@ -51,7 +51,7 @@ const TaskItem: React.FC<IProps> = ({ task, tasks, setTasks }: IProps):JSX.Eleme
 
     return (
       <div className={`${getPriority(task.priority)} ${getBackgroundColor(task.category)}`}>
-          <li className={`task-item ${task.completed ? 'completed' : ''}`}>
+          <li className={`${task.completed ? 'completed' : ''}`}>
             <div className={style.taskItem}>
             <span className={style.taskItem__category} >{task.category}</span>
             <div>

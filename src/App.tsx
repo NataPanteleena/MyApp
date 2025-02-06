@@ -11,7 +11,7 @@ import TaskList from './components/TaskList/TaskList.tsx';
 const App = ():JSX.Element => {
   const [tasks, setTasks] = useState<ITask[] | []>([]);
   const [filter, setFilter] = useState<string>('all');
-  const [categoty, setCategoty] = useState<string>('Все');
+  const [category, setCategory] = useState<string>('Все');
 
 
   useEffect((): void => {
@@ -27,10 +27,10 @@ const App = ():JSX.Element => {
       <TaskInput tasks={tasks} setTasks={setTasks} />
       <div className= "task-panel">
         <div className="btn-block">
-          <Categories category={categoty} setCategory={setCategoty}/>
+          <Categories category={category} setCategory={setCategory}/>
           <Filters filter={filter} setFilter={setFilter} />
         </div>
-      <TaskList tasks={tasks} setTasks={setTasks} filter={filter} category={categoty}/>
+      <TaskList tasks={tasks} setTasks={setTasks} filter={filter} category={category}/>
     </div>
     </div>
     );
