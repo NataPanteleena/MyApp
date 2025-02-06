@@ -1,6 +1,7 @@
 import {ITask} from "../../types/types.ts";
 import style from "./TaskItem.module.scss";
 import axios from 'axios';
+import React from 'react';
 
 interface IProps {
     task: ITask;
@@ -8,9 +9,9 @@ interface IProps {
     setTasks: (task: ITask[]) => void;
 }
 
-const TaskItem = ({ task, tasks, setTasks }: IProps) => {
+const TaskItem: React.FC<IProps> = ({ task, tasks, setTasks }: IProps):JSX.Element => {
 
-    const getBackgroundColor = (category: ITask['category']) => {
+    const getBackgroundColor = (category: ITask['category']): string => {
       switch (category) {
         case 'Работа' : return style.categoryWork;
         case 'Дом' : return style.categoryHome;
@@ -19,19 +20,19 @@ const TaskItem = ({ task, tasks, setTasks }: IProps) => {
       }
     };
 
-    const getPriority = (priority: ITask['priority']) => {
+    const getPriority = (priority: ITask['priority']): string | undefined => {
       if (priority) {
         return style.highPriority
       }
     };
 
-    const deleteTask = async ()=> {
+    const deleteTask = async () : Promise<void> => {
       await axios.delete(`https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks/${task.id}`);
 
-      setTasks(tasks.filter((t) => t.id !== task.id));
+      setTasks(tasks.filter((t):boolean => t.id !== task.id));
     };
 
-    const toggleCompletion = async () => {
+    const toggleCompletion = async () : Promise<void> => {
       try {
         const updatedTask = { ...task, completed: !task.completed };
         const response = await axios.put(`https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks/${task.id}`,
@@ -39,7 +40,7 @@ const TaskItem = ({ task, tasks, setTasks }: IProps) => {
         console.log('задача обновлена', response.data);
  
         setTasks(
-          tasks.map((t) => t.id === task.id ? { ...t, completed: !t.completed } : t
+          tasks.map((t):ITask => t.id === task.id ? { ...t, completed: !t.completed } : t
           )
         );
       } catch (error) {

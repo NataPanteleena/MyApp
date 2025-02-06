@@ -1,4 +1,5 @@
 import style from '../Categories/Categories.module.scss';
+import React from 'react';
 
 
 interface IProps {
@@ -7,7 +8,7 @@ interface IProps {
 }
 
 
-const Categories = ({category, setCategory}: IProps) => {
+const Categories: React.FC<IProps> = ({category, setCategory}: IProps):JSX.Element => {
 
     return (
       <div className="categories">
@@ -16,35 +17,35 @@ const Categories = ({category, setCategory}: IProps) => {
           <button
             key="all"
             className={category === 'Все' ? style.active : ''}
-            onClick={() => setCategory('Все')}
+            onClick={():void => setCategory('Все')}
           >
             Все категории
           </button>
           <button
             key="home"
             className={category === 'Дом' ? style.active : ''}
-            onClick={() => setCategory('Дом')}
+            onClick={():void => setCategory('Дом')}
           >
             Дом
           </button>
           <button
             key="work"
             className={category === 'Работа' ? style.active : ''}
-            onClick={() => setCategory('Работа')}
+            onClick={():void => setCategory('Работа')}
           >
             Работа
           </button>
           <button
             key="personal"
             className={category === 'Личные' ? style.active : ''}
-            onClick={() => setCategory('Личные')}
+            onClick={():void => setCategory('Личные')}
           >
             Личные
           </button>
           <button
             key="other"
             className={category === 'Без категории' ? style.active : ''}
-            onClick={() => setCategory('Без категории')}
+            onClick={():void => setCategory('Без категории')}
           >
             Без категории
           </button>

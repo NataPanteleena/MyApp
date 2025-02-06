@@ -8,13 +8,13 @@ import Filters from './components/Filters/Filters.tsx';
 import Categories from './components/Categories/Categories.tsx';
 import TaskList from './components/TaskList/TaskList.tsx';
 
-const App = () => {
+const App = ():JSX.Element => {
   const [tasks, setTasks] = useState<ITask[] | []>([]);
   const [filter, setFilter] = useState<string>('all');
   const [categoty, setCategoty] = useState<string>('Все');
 
 
-  useEffect(() => {
+  useEffect((): void => {
     fetch('https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks/')
       .then(res => res.json())
       .then(task => setTasks(task));

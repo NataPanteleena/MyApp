@@ -8,24 +8,24 @@ interface IProps {
     setTasks: (task: ITask[]) => void;
 }
 
-const TaskInput = ({ tasks, setTasks }: IProps): JSX.Element => {
+const TaskInput: React.FC<IProps> = ({ tasks, setTasks }: IProps): JSX.Element => {
     const [inputValue, setInputValue] = useState<string>('');
     const [selectedOption, setSelectedOption] = useState<string>('Без категории');
     const [checked, setChecked] = useState(false);
 
-    const handleInputValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputValue = (event: React.ChangeEvent<HTMLInputElement>):void => {
       setInputValue(event.target.value);
     };
 
-    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>):void => {
       setSelectedOption(event.target.value);
     };
 
-    const handleCheckboxChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+    const handleCheckboxChange = (event:React.ChangeEvent<HTMLInputElement>):void => {
       setChecked(event.target.checked);
     };
 
-  const addTask = async () => {
+  const addTask = async (): Promise<void> => {
         if (inputValue.trim()) {
           const newTask = {
                 id: Date.now(),
@@ -37,7 +37,7 @@ const TaskInput = ({ tasks, setTasks }: IProps): JSX.Element => {
 
           try {
             const response = await axios.post('https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks', newTask);
-            console.log('Задача успешно сохранена на сервере:', response.data);
+            console.log('Задача успешно сохранена:', response.data);
 
             setTasks([...tasks, newTask]);
             setInputValue('');

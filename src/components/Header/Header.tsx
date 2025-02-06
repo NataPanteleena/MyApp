@@ -1,12 +1,14 @@
 import style from './Header.module.scss'
 import myLogo from '../../assets/hedgehog.svg';
+import React from 'react';
 
 interface IProps {
     title: string;
     text: string;
 }
 
-const Header = ({ title, text}: IProps) => {
+const Header: React.FC<IProps> = ({ title, text}: IProps):JSX.Element => {
+
     return (
       <header className={style.header}>
           <img src={myLogo} className={style.logo} alt="logo" />
