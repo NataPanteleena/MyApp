@@ -1,0 +1,29 @@
+.enter_block {
+  margin: 0 auto;
+
+}
+
+.enter_block__header {
+  display: flex;
+  width: 400px;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  padding: 10px 20px;
+  background: #c3c6f9;
+  border-radius: 15px;
+}
+
+.header__text {
+  font-size: 1.2em;
+  color: #053157;
+}
+
+.logo {
+  height: 6em;
+  padding: 1em;
+}
+
+.enter_block__nav {
+  width: 300px;
+}

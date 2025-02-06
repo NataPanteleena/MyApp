@@ -6,12 +6,14 @@ import axios from 'axios';
 interface IProps {
     tasks: ITask[] | [];
     setTasks: (task: ITask[]) => void;
+    userId: number;
 }
 
-const TaskInput: React.FC<IProps> = ({ tasks, setTasks }: IProps): JSX.Element => {
+const TaskInput: React.FC<IProps> = ({ tasks, setTasks, userId }: IProps): JSX.Element => {
     const [inputValue, setInputValue] = useState<string>('');
     const [selectedOption, setSelectedOption] = useState<string>('Без категории');
     const [checked, setChecked] = useState(false);
+
 
     const handleInputValue = (event: React.ChangeEvent<HTMLInputElement>):void => {
       setInputValue(event.target.value);
@@ -33,6 +35,7 @@ const TaskInput: React.FC<IProps> = ({ tasks, setTasks }: IProps): JSX.Element =
                 category:selectedOption,
                 priority:checked,
                 completed: false,
+                userID: userId,
               };
 
           try {

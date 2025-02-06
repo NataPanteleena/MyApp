@@ -1,7 +1,8 @@
 export interface ITask {
   id: number;
   text: string;
-  category:string;
+  category: string;
   priority: boolean;
   completed: boolean;
+  userId: number;
 }
