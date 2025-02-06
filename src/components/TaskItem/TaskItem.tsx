@@ -17,18 +17,24 @@ const TaskItem = ({ task, tasks, setTasks }: IProps) => {
         case 'Личные' : return style.categoryPersonal;
         default: return style.categoryOthers;
       }
-    }
+    };
 
     const getPriority = (priority: ITask['priority']) => {
       if (priority) {
         return style.highPriority
       }
-    }
+    };
+
+    const deleteTask = async ()=> {
+      await axios.delete(`https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks/${task.id}`);
+
+      setTasks(tasks.filter((t) => t.id !== task.id));
+    };
 
     const toggleCompletion = async () => {
       try {
         const updatedTask = { ...task, completed: !task.completed };
-        const response = await axios.put(`https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks/:${task.id}`,
+        const response = await axios.put(`https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks/${task.id}`,
           updatedTask);
         console.log('задача обновлена', response.data);
  
@@ -40,18 +46,6 @@ const TaskItem = ({ task, tasks, setTasks }: IProps) => {
         console.log('возникла ошибка:', error);
       }
     };
-
-    const deleteTask = async () => {
-      try {
-        await axios.delete(`https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks/:${task.id}`);
-        console.log('Задача удалена');
-
-        setTasks(tasks.filter((t) => t.id !== task.id));
-      } catch (error) {
-        console.log('возникла ошибка:', error);
-      }
-    };
-
 
 
     return (
