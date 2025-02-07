@@ -1,16 +1,15 @@
 import style from '../TaskList/TaskList.module.scss';
 import TaskItem from '../TaskItem/TaskItem.tsx';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store.ts';
+import {ITask} from '../../types/types.ts';
 
 interface IProps {
+  tasks: ITask[];
   filter:string;
   category:string;
 }
 
-const TaskList: React.FC<IProps> = ({ filter, category }: IProps): JSX.Element => {
-  const tasks = useSelector((state: RootState) => state.tasks.tasks);
+const TaskList: React.FC<IProps> = ({ tasks, filter, category }: IProps): JSX.Element => {
 
   const filteredTasks = tasks.
   filter((task): boolean => {
