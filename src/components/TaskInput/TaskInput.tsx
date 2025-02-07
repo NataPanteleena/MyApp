@@ -1,21 +1,21 @@
 import React, {useState} from 'react';
-import {ITask} from "../../types/types.ts";
 import style from "./TaskInput.module.scss";
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { addTask } from '../../store/tasks/tasksReducer.ts';
 
 interface IProps {
-    tasks: ITask[] | [];
-    setTasks: (task: ITask[]) => void;
     userId: number;
 }
 
-const TaskInput: React.FC<IProps> = ({ tasks, setTasks, userId }: IProps): JSX.Element => {
+const TaskInput: React.FC<IProps> = ({ userId }: IProps): JSX.Element => {
     const [inputValue, setInputValue] = useState<string>('');
     const [selectedOption, setSelectedOption] = useState<string>('Без категории');
     const [checked, setChecked] = useState(false);
+    const dispatch = useDispatch();
 
 
-    const handleInputValue = (event: React.ChangeEvent<HTMLInputElement>):void => {
+  const handleInputValue = (event: React.ChangeEvent<HTMLInputElement>):void => {
       setInputValue(event.target.value);
     };
 
@@ -27,7 +27,7 @@ const TaskInput: React.FC<IProps> = ({ tasks, setTasks, userId }: IProps): JSX.E
       setChecked(event.target.checked);
     };
 
-  const addTask = async (): Promise<void> => {
+    const handleAddTask = async (): Promise<void> => {
         if (inputValue.trim()) {
           const newTask = {
                 id: Date.now(),
@@ -42,7 +42,8 @@ const TaskInput: React.FC<IProps> = ({ tasks, setTasks, userId }: IProps): JSX.E
             const response = await axios.post('https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks', newTask);
             console.log('Задача успешно сохранена:', response.data);
 
-            setTasks([...tasks, newTask]);
+            dispatch(addTask(response.data));
+
             setInputValue('');
             setSelectedOption('Без категории');
             setChecked(false);
@@ -76,7 +77,7 @@ const TaskInput: React.FC<IProps> = ({ tasks, setTasks, userId }: IProps): JSX.E
             <option value="Личные">Личные</option>
           </select>
         </form>
-        <button onClick={addTask}>Добавить</button>
+        <button onClick={handleAddTask}>Добавить</button>
       </div>
     );
 };

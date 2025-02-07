@@ -1,7 +1,7 @@
-import { createSlice} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {fetchTasks} from "./thunk.ts";
 
-export interface TasksData {
+export type ITask = {
   id: number;
   text: string;
   category: string;
@@ -11,21 +11,34 @@ export interface TasksData {
 }
 
 interface TasksState {
-  data: TasksData[];
+  tasks: ITask[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: TasksState = {
-  data: [],
+  tasks: [],
   loading: false,
   error: null,
 };
 
-const userSlice = createSlice({
+const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
-  reducers: {},
+  reducers: {
+    addTask: (state, action: PayloadAction<ITask>) => {
+      state.tasks.push(action.payload);
+    },
+    deleteTask: (state, action: PayloadAction<number>) => {
+      state.tasks = state.tasks.filter((task) => task.id !== action.payload);
+    },
+    toggleTaskCompletion: (state, action: PayloadAction<number>) => {
+      const task = state.tasks.find((task) => task.id === action.payload);
+      if (task) {
+        task.completed = !task.completed;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchTasks.pending, (state) => {
@@ -33,7 +46,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchTasks.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        state.tasks = action.payload;
       })
       .addCase(fetchTasks.rejected, (state, action) => {
         state.loading = false;
@@ -41,5 +54,5 @@ const userSlice = createSlice({
       });
   },
 });
-
-export const tasksReducer = userSlice.reducer;
+export const { addTask, deleteTask, toggleTaskCompletion } = tasksSlice.actions;
+export const tasksReducer = tasksSlice.reducer;

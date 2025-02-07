@@ -2,21 +2,26 @@ import {ITask} from "../../types/types.ts";
 import style from "./TaskItem.module.scss";
 import axios from 'axios';
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { deleteTask, toggleTaskCompletion } from '../../store/tasks/tasksReducer.ts';
 
 interface IProps {
     task: ITask;
-    tasks: ITask[];
-    setTasks: (task: ITask[]) => void;
 }
 
-const TaskItem: React.FC<IProps> = ({ task, tasks, setTasks }: IProps):JSX.Element => {
+const TaskItem: React.FC<IProps> = ({ task }: IProps):JSX.Element => {
+  const dispatch = useDispatch();
 
     const getBackgroundColor = (category: ITask['category']): string => {
       switch (category) {
-        case 'Работа' : return style.categoryWork;
-        case 'Дом' : return style.categoryHome;
-        case 'Личные' : return style.categoryPersonal;
-        default: return style.categoryOthers;
+        case 'Работа' :
+          return style.categoryWork;
+        case 'Дом' :
+          return style.categoryHome;
+        case 'Личные' :
+          return style.categoryPersonal;
+        default:
+          return style.categoryOthers;
       }
     };
 
@@ -26,28 +31,24 @@ const TaskItem: React.FC<IProps> = ({ task, tasks, setTasks }: IProps):JSX.Eleme
       }
     };
 
-    const deleteTask = async () : Promise<void> => {
-      await axios.delete(`https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks/${task.id}`);
-
-      setTasks(tasks.filter((t):boolean => t.id !== task.id));
-    };
-
-    const toggleCompletion = async () : Promise<void> => {
+    const handleDeleteTask = async () : Promise<void> => {
       try {
-        const updatedTask = { ...task, completed: !task.completed };
-        const response = await axios.put(`https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks/${task.id}`,
-          updatedTask);
-        console.log('задача обновлена', response.data);
- 
-        setTasks(
-          tasks.map((t):ITask => t.id === task.id ? { ...t, completed: !t.completed } : t
-          )
-        );
+        await axios.delete(`https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks/${task.id}`);
+        dispatch(deleteTask(task.id));
       } catch (error) {
-        console.log('возникла ошибка:', error);
+        console.error('Ошибка при удалении задачи:', error);
       }
     };
 
+    const handleToggleCompletion = async () : Promise<void> => {
+      try {
+        const updatedTask = { ...task, completed: !task.completed };
+        await axios.put(`https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks/${task.id}`, updatedTask);
+        dispatch(toggleTaskCompletion(task.id));
+      } catch (error) {
+        console.error('Ошибка при обновлении задачи:', error);
+      }
+    };
 
     return (
       <div className={`${getPriority(task.priority)} ${getBackgroundColor(task.category)}`}>
@@ -59,11 +60,11 @@ const TaskItem: React.FC<IProps> = ({ task, tasks, setTasks }: IProps):JSX.Eleme
               className={style.taskItem__checkbox}
               type="checkbox"
               checked={task.completed}
-              onChange={toggleCompletion}
+              onChange={handleToggleCompletion}
             />
             </div>
             <span className={style.taskItem__task} >{task.text}</span>
-            <button className={style.taskItem__button} onClick={deleteTask}>Удалить</button>
+            <button className={style.taskItem__button} onClick={handleDeleteTask}>Удалить</button>
             </div>
           </li>
       </div>
