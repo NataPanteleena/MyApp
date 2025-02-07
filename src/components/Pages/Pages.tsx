@@ -5,7 +5,7 @@ import TaskInput from '../../components/TaskInput/TaskInput.tsx';
 import Filters from '../../components/Filters/Filters.tsx';
 import Categories from '../../components/Categories/Categories.tsx';
 import TaskList from '../../components/TaskList/TaskList.tsx';
-import { Outlet, useOutletContext } from 'react-router-dom';
+import style from './Pages.module.scss'
 
 const BuildPage = ({ userId }: { userId: number }): JSX.Element => {
   const [tasks, setTasks] = useState<ITask[] | []>([]);
@@ -13,19 +13,19 @@ const BuildPage = ({ userId }: { userId: number }): JSX.Element => {
   const [category, setCategory] = useState<string>('Все');
 
   useEffect((): void => {
-    fetch('https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks/')
+    fetch(`https://67a328e431d0d3a6b7827b97.mockapi.io/api/todo/tasks/?userId=${userId}`)
       .then((res) => res.json())
       .then((task) => setTasks(task));
   }, []);
 
   return (
     <>
-      <div className="app">
+      <div className={style.app}>
         <span>Пользователь {userId}</span>
         <Header title="TODO List" text="Дорогу осилит идущий... Топай давай!!!" />
         <TaskInput tasks={tasks} setTasks={setTasks} userId={userId} />
-        <div className="task-panel">
-          <div className="btn-block">
+        <div className={style.task_panel}>
+          <div className={style.btn_block}>
             <Categories category={category} setCategory={setCategory} />
             <Filters filter={filter} setFilter={setFilter} />
           </div>

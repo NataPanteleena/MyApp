@@ -35,7 +35,7 @@ const TaskInput: React.FC<IProps> = ({ tasks, setTasks, userId }: IProps): JSX.E
                 category:selectedOption,
                 priority:checked,
                 completed: false,
-                userID: userId,
+                userId: userId,
               };
 
           try {
