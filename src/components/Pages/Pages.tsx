@@ -5,20 +5,21 @@ import Filters from '../../components/Filters/Filters.tsx';
 import Categories from '../../components/Categories/Categories.tsx';
 import TaskList from '../../components/TaskList/TaskList.tsx';
 import style from './Pages.module.scss';
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {fetchTasks} from "../../store/tasks/thunk.ts";
 import {getTasks} from "../../store/tasks/selector.ts";
 import { RootState } from '../../store/store.ts';
+import { useAppDispatch } from '../../store/store';
 
 const BuildPage = ({ userId }: { userId: number }): JSX.Element => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const tasks = useSelector((state: RootState) => getTasks(state));
 
   const [filter, setFilter] = useState<string>('all');
   const [category, setCategory] = useState<string>('Все');
 
   useEffect(() => {
-    dispatch(fetchTasks(userId) as any)
+    dispatch(fetchTasks(userId))
   }, [dispatch, userId]);
 
   return (
